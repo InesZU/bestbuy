@@ -2,9 +2,7 @@ class Product:
 
     def __init__(self, name, price, quantity):
         self.name = name
-        active = True
-        if not active:
-            raise Exception("Sorry, no availble")
+        self.active = True
         self.quantity = quantity
         self.price = price
 
@@ -41,7 +39,6 @@ class Product:
         total_price = self.price * quantity
         if self.quantity == 0:
             self.deactivate()
-
         return total_price
 
 if __name__ == "__main__":
@@ -56,3 +53,5 @@ if __name__ == "__main__":
 
     bose.set_quantity(1000)
     print(bose.show())
+
+
