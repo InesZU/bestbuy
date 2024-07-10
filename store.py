@@ -2,7 +2,7 @@ import products
 
 
 class Store:
-    def __init__(self, product):
+    def __init__(self, product: object) -> object:
         self.products = product
 
     def add_product(self, product):
@@ -12,7 +12,7 @@ class Store:
         if product in self.products:
             self.products.remove(product)
 
-    def get_total_quantity(self) -> int:
+    def get_total_quantity(self, product_list) -> int:
         total_quantity = sum(product.get_quantity() for product in self.products)
         return total_quantity
 
