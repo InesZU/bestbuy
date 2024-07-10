@@ -30,7 +30,8 @@ def start(store):
             print(f"\nTotal amount of items in store: {total_quantity}")
 
         elif choice == "3":
-            total_price = 0.0
+            shopping_list = []
+            price = 0
             while True:
                 products_list = store.get_all_products()
                 for i in range(len(products_list)):
@@ -43,16 +44,20 @@ def start(store):
                     print("\nInvalid product choice. Please try again.\n")
                     continue
                 if quantity_choice <= 0:
-                    print("\nQuantity must be valid. Please try again.")
+                    print("\nQuantity must be valid. Please try again.\n")
                     continue
 
                 selected_product = products_list[product_choice]
-                total_price += store.order([(selected_product, quantity_choice)])
-                print(f"\nOrder placed successfully! Total price: €{total_price:.2f}")
+                shopping_list.append((selected_product, quantity_choice))
+                price = store.order([(selected_product, quantity_choice)])
+                print(f"\nOrder placed successfully! The price: €{price:.2f}")
 
-                another_product = input("Do you want to buy another product? (yes/no): ").strip().lower()
+                another_product = input("Do you want to buy another product? (yes/no): \n").strip().lower()
                 if another_product != 'yes':
                     break
+
+            total_price = store.order(shopping_list)
+            print(f"\nTotal price of your order: €{total_price:.2f}\n")
 
         elif choice == '4':
             print("Thank you for visiting the shop, see you soon.")
