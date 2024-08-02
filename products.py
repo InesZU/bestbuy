@@ -7,10 +7,14 @@ class Product:
             price: The price of the product.
             quantity: The initial quantity of the product in stock.
         """
-        self.name = name
-        self.active = True
-        self.quantity = quantity
-        self.price = price
+        if not name or price < 0 or quantity < 0:
+            raise ValueError(
+                "Invalid product details: Ensure name is non-empty, price is non-negative, and quantity is non-negative.")
+
+        self.name=name
+        self.active=True
+        self.quantity=quantity
+        self.price=price
 
     def get_quantity(self) -> int:
         """Returns the current quantity of the product."""
@@ -23,7 +27,7 @@ class Product:
         Args:
             quantity: The new quantity for the product.
         """
-        self.quantity = quantity
+        self.quantity=quantity
         if self.quantity <= 0:
             self.deactivate()
 
@@ -37,11 +41,11 @@ class Product:
 
     def activate(self):
         """Sets the product to active (available for purchase)."""
-        self.active = True
+        self.active=True
 
     def deactivate(self):
         """Sets the product to inactive (unavailable for purchase)."""
-        self.active = False
+        self.active=False
 
     def show(self) -> str:
         """Returns a string representation of the product with name, price, and quantity."""
@@ -64,8 +68,8 @@ class Product:
         if quantity > self.quantity:
             raise ValueError("Not enough quantity available.")
 
-        self.quantity -= quantity
-        total_price = self.price * quantity
+        self.quantity-=quantity
+        total_price=self.price * quantity
         if self.quantity == 0:
             self.deactivate()
         return total_price
