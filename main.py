@@ -1,11 +1,14 @@
 import store
 import products
+import promotions
+
 
 def display_products(store):
     """Displays all products in the store."""
     products_list = store.get_all_products()
     for i, product in enumerate(products_list):
         print(f"{i + 1}. {product.show()}")
+
 
 def start(store):
     """
@@ -63,17 +66,35 @@ def start(store):
             print(f"\nTotal price of your order: €{total_price:.2f}\n")
 
         elif choice == '4':
-            print("Thank you for visiting the shop, see you soon.")
+            print("Thank you for visiting our shop, see you soon.")
             break
 
         else:
             print("Invalid choice. Please try again.")
 
+
 if __name__ == "__main__":
-    # setup initial stock of inventory
-    product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
-                    products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                    products.Product("Google Pixel 7", price=500, quantity=250)
-                    ]
+    # Setup initial stock of inventory
+    product_list = [
+        products.Product("MacBook Air M2", price=1450, quantity=100),
+        products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+        products.Product("Google Pixel 7", price=500, quantity=250),
+        products.NonStockedProduct("Windows License", price=125),
+        products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
+    ]
+
+    # Create promotion catalog
+    second_half_price = promotions.SecondItemHalfPrice("Second item at half price")
+    third_one_free = promotions.Buy2Get1Free("Buy 2, get 1 free")
+    thirty_percent = promotions.PercentageDiscount("30% off", percent=30)
+
+    # Add promotions to products
+    product_list[0].set_promotion(second_half_price)  # MacBook Air gets Second Item Half Price
+    product_list[1].set_promotion(third_one_free)  # Bose gets Buy 2 Get 1 Free
+    product_list[3].set_promotion(thirty_percent)  # Windows License gets 30% off
+
+    # Initialize store with products
     best_buy = store.Store(product_list)
+
+    # Start the store app
     start(best_buy)
