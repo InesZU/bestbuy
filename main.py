@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     # Add promotions to products
     product_list[0].set_promotion(second_half_price)  # MacBook Air gets Second Item Half Price
-    product_list[1].set_promotion(third_one_free)  # Bose gets Buy 2 Get 1 Free
+    product_list[1].set_promotion(third_one_free)  # Bose gets Buy 2, Get 1 Free
     product_list[3].set_promotion(thirty_percent)  # Windows License gets 30% off
 
     # Initialize store with products

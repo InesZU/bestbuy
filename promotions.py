@@ -92,9 +92,20 @@ class Buy2Get1Free(Promotion):
         """
         super().__init__(name)
 
+    class Buy2Get1Free(Promotion):
+        def __init__(self, name: str):
+            """
+            Initializes a Buy2Get1Free promotion.
+
+            Args:
+                name (str): The name of the promotion.
+            """
+            super().__init__(name)
+
     def apply_promotion(self, product: Product, quantity: int) -> float:
         """
         Applies a buy-2-get-1-free promotion to the total price.
+        For every 2 items, 1 item is free.
 
         Args:
             product (Product): The product to apply the promotion to.
@@ -108,6 +119,8 @@ class Buy2Get1Free(Promotion):
         """
         if quantity <= 0:
             raise ValueError("Quantity must be greater than zero.")
-        free_items = quantity // 3
-        paid_items = quantity - free_items
+
+        # Calculate the number of items to be paid for
+        paid_items = (quantity + 1) // 2
+
         return paid_items * product.price

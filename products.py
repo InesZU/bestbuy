@@ -94,16 +94,39 @@ class NonStockedProduct(Product):
     """
 
     def __init__(self, name: str, price: float):
-        """Initializes a NonStockedProduct with name and price."""
-        super().__init__(name, price, 0)
+        """
+        Initializes a NonStockedProduct with name and price.
+        """
+        super().__init__(name, price, quantity=float('inf'))  # Set a large quantity to represent unlimited stock
 
-    def set_quantity(self, quantity: int) -> None:
-        """Overrides to prevent changing quantity."""
+    def set_quantity(self, quantity: int):
+        """
+        Overrides to prevent changing quantity.
+        """
         pass
 
-    def get_quantity(self) -> int:
-        """Always returns 0 for NonStockedProduct."""
-        return 0
+    def buy(self, quantity: int) -> float:
+        """
+        Buys a specified quantity without checking for stock.
+
+        Args:
+            quantity (int): Quantity to buy.
+
+        Returns:
+            float: Total price.
+
+        Raises:
+            ValueError: If quantity is invalid.
+        """
+        if quantity <= 0:
+            raise ValueError("Quantity to buy should be greater than zero.")
+
+        if self.promotion:
+            total_price = self.promotion.apply_promotion(self, quantity)
+        else:
+            total_price = self.price * quantity
+
+        return total_price
 
 
 class LimitedProduct(Product):
