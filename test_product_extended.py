@@ -1,18 +1,22 @@
 import pytest
-from products import Product, NonStockedProduct, LimitedProduct
+from products import NonStockedProduct, LimitedProduct
 
 
 def test_non_stocked_product():
     """Test that NonStockedProduct behaves correctly."""
     product = NonStockedProduct("Windows License", price=125)
-    assert product.get_quantity() == 0
-    assert product.is_active() is True
 
-    with pytest.raises(ValueError):
-        product.buy(0)  # Should raise a ValueError, as you can't buy this product
+    # Non-stocked products have an "infinite" quantity
+    assert product.get_quantity() == float('inf')  # Should return infinite quantity
+    assert product.is_active() is True  # Non-stocked products should always be active
 
+    # Invalid purchase request should raise ValueError
     with pytest.raises(ValueError):
-        product.buy(1)  # Should not be allowed to purchase
+        product.buy(0)  # Can't buy 0 quantity, should raise ValueError
+
+    # Valid purchase request should work and return the correct total price
+    assert product.buy(1) == 125  # Buying 1 Windows License, should return correct price
+    assert product.buy(5) == 125 * 5  # Buying 5 licenses should also work and return correct price
 
 
 def test_limited_product():

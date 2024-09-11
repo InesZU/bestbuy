@@ -21,7 +21,7 @@ class Product:
         self.name = name
         self.price = price
         self.quantity = quantity
-        self.active = True
+        self.active = quantity > 0
         self.promotion = promotion
 
     def get_quantity(self) -> int:
@@ -56,8 +56,10 @@ class Product:
 
     def show(self) -> str:
         """Returns a string representation of the product."""
-        promotion_info = f"Promotion: {self.promotion}" if self.promotion else "No promotion"
-        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}, {promotion_info}"
+        promotion_info = f"Promotion: {self.promotion}" \
+            if self.promotion else "No promotion"
+        return (f"{self.name}, Price: {self.price}, "
+                f"Quantity: {self.quantity}, {promotion_info}")
 
     def buy(self, quantity: int) -> float:
         """
@@ -78,10 +80,11 @@ class Product:
             raise ValueError("Not enough quantity available.")
 
         # Apply promotion if any, otherwise calculate regular price
-        total_price = self.promotion.apply_promotion(self, quantity) if self.promotion else self.price * quantity
+        total_price = self.promotion.apply_promotion(self, quantity) \
+            if self.promotion else self.price * quantity
 
         # Decrement stock and deactivate if stock hits zero
-        self.quantity -= quantity
+        self.set_quantity(self.quantity - quantity)
         if self.quantity == 0:
             self.deactivate()
 
@@ -97,7 +100,7 @@ class NonStockedProduct(Product):
         """
         Initializes a NonStockedProduct with name and price.
         """
-        super().__init__(name, price, quantity=float('inf'))  # Set a large quantity to represent unlimited stock
+        super().__init__(name, price, quantity=float('inf'))
 
     def set_quantity(self, quantity: int):
         """
@@ -107,26 +110,27 @@ class NonStockedProduct(Product):
 
     def buy(self, quantity: int) -> float:
         """
-        Buys a specified quantity without checking for stock.
-
+        Buys a specified quantity of a non-stocked product.
+        Always assumes unlimited stock.
         Args:
             quantity (int): Quantity to buy.
-
         Returns:
-            float: Total price.
-
+            float: Total price for the specified quantity.
         Raises:
-            ValueError: If quantity is invalid.
+            ValueError: If the quantity is less than or equal to zero.
         """
         if quantity <= 0:
             raise ValueError("Quantity to buy should be greater than zero.")
 
-        if self.promotion:
-            total_price = self.promotion.apply_promotion(self, quantity)
-        else:
-            total_price = self.price * quantity
+        total_price = self.promotion.apply_promotion(self, quantity) \
+            if self.promotion else self.price * quantity
 
         return total_price
+
+    def show(self) -> str:
+        """Returns a string representation of the non-stocked product."""
+        base_info = super().show()
+        return f"{base_info}, Unlimited stock"
 
 
 class LimitedProduct(Product):

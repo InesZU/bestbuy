@@ -43,8 +43,8 @@ def test_second_item_half_price(setup_products):
 def test_buy2_get1_free(setup_products):
     product = next(p for p in setup_products if p.name == "Bose QuietComfort Earbuds")
     # Verify the correct price calculation with the promotion applied
-    assert product.buy(2) == 250  # Buy 2, get 1 free, so you pay for 1
-    assert product.buy(3) == 500  # Buy 3, get 1 free, pay for 2
+    assert product.buy(3) == 500  # Buy 3, so you pay for 2
+    assert product.buy(4) == 750  # Buy 4, get 1 free, pay for 3
 
 
 def test_limited_product(setup_products):
